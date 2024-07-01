@@ -1,5 +1,5 @@
 import express from "express";
-import { createProxyMiddleware } from "http-proxy-middleware";
+import { createProxyMiddleware, Options } from "http-proxy-middleware";
 
 const app = express();
 
@@ -15,11 +15,38 @@ const services = [
 ];
 
 services.forEach(({ route, target }) => {
-  const proxyOptions = {
+  const proxyOptions: Options = {
     target,
     changeOrigin: true,
     pathRewrite: {
       [`^${route}`]: "",
+    },
+    on: {
+      proxyReq: (proxyReq, req, res) => {
+        const token = req.headers.authorization;
+
+        if (!token) {
+          return;
+        }
+
+        // This should be a GRPC call to auth service to validate the token
+        const isValid = token?.includes("bananas");
+
+        if (!isValid) {
+          res.writeHead(403, {
+            "Content-Type": "application/json",
+          });
+          res.end(
+            JSON.stringify({
+              message: "A valid access token is required...",
+            })
+          );
+
+          return;
+        }
+
+        proxyReq.setHeader("x-user-id", "shabalaba");
+      },
     },
   };
 
