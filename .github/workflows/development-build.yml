@@ -10,7 +10,7 @@ jobs:
     name: Build
     runs-on: ubuntu-latest
     steps:
-      - name: Checkouts
+      - name: Checkout
         uses: actions/checkout@v2
 
       - name: Configure AWS credentials
