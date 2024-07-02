@@ -12,7 +12,7 @@ COPY . .
 
 RUN yarn build
 
-FROM node:alpine AS production
+FROM node:alpine
 
 ENV NODE_ENV production
 
