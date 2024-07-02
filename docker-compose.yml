@@ -1,0 +1,19 @@
+version: '3.7'
+
+services:
+  main:
+    build:
+      context: .
+      target: build
+    volumes:
+      - ./:/app
+      - /usr/src/app/node_modules
+    ports:
+      - 1003:1003
+    networks:
+      - main-application
+    command: yarn start:dev
+
+networks:
+  main-application:
+    driver: bridge

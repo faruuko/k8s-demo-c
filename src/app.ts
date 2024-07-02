@@ -6,18 +6,21 @@ const app = express();
 const services = [
   {
     route: "/demo-a",
-    target: "http://localhost:1001/",
+    target: "http://host.docker.internal:1001",
   },
   {
     route: "/demo-b",
-    target: "http://localhost:1002/",
+    target: "http://host.docker.internal:1002",
   },
 ];
 
 services.forEach(({ route, target }) => {
   const proxyOptions: Options = {
     target,
-    changeOrigin: true,
+    changeOrigin: false,
+    headers: {
+      Connection: "keep-alive",
+    },
     pathRewrite: {
       [`^${route}`]: "",
     },
