@@ -26,4 +26,6 @@ RUN yarn install --production=true --frozen-lockfile --non-interactive
 
 COPY --from=build /usr/src/app/dist ./dist
 
+EXPOSE 1003
+
 CMD ["node", "dist/app.js"]
